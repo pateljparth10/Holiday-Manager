@@ -36,7 +36,7 @@ class HolidayList:
     def addHoliday(holidayObj):
         # Make sure holidayObj is an Holiday Object by checking the type
         # Use innerHolidays.append(holidayObj) to add holiday
-        self.innerHolidays.append(holidayObj)
+        HolidayList.innerHolidays.append(holidayObj)
         print("Sucess: ")
         print(f"{holidayObj.name} ({holidayObj.date}) has been added to the holiday list.")
         # print to the user that you added a holiday
