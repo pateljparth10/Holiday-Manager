@@ -4,6 +4,7 @@ from datetime import datetime
 import itertools
 import json
 from bs4 import BeautifulSoup as soup
+from numpy import datetime_as_string
 import requests
 from dataclasses import dataclass
 from splinter import Browser
@@ -86,7 +87,9 @@ class HolidayList:
         for tags in TextDisplayObject:
             website_content = tags.get_text("|").split("|")
             date = "2022 " + website_content[0] 
-            website_holiday = Holiday(date, website_content[2])
+            date_time_date = datetime.strptime(date, "%Y %b %d")
+            date_string = datetime.strftime(date_time_date, "%Y-%m-%d")
+            website_holiday = Holiday(website_content[2], date_string)
             global add_test
             add_test.addHoliday(website_holiday)
         
@@ -100,7 +103,9 @@ class HolidayList:
         for tags in TextDisplayObject:
             website_content = tags.get_text("|").split("|")
             date = "2021 " + website_content[0] 
-            website_holiday = Holiday(date, website_content[2])
+            date_time_date = datetime.strptime(date, "%Y %b %d")
+            date_string = datetime.strftime(date_time_date, "%Y-%m-%d")
+            website_holiday = Holiday(website_content[2], date_string)
             add_test.addHoliday(website_holiday)
         url_2020 = "https://www.timeanddate.com/holidays/us/2020?hol=1"
         executable_path = {'executable_path': ChromeDriverManager().install()}
@@ -112,7 +117,9 @@ class HolidayList:
         for tags in TextDisplayObject:
             website_content = tags.get_text("|").split("|")
             date = "2020 " + website_content[0] 
-            website_holiday = Holiday(date, website_content[2])
+            date_time_date = datetime.strptime(date, "%Y %b %d")
+            date_string = datetime.strftime(date_time_date, "%Y-%m-%d")
+            website_holiday = Holiday(website_content[2], date_string)
             add_test.addHoliday(website_holiday)
         url_2023 = "https://www.timeanddate.com/holidays/us/2023?hol=1"
         executable_path = {'executable_path': ChromeDriverManager().install()}
@@ -124,7 +131,9 @@ class HolidayList:
         for tags in TextDisplayObject:
             website_content = tags.get_text("|").split("|")
             date = "2023 " + website_content[0] 
-            website_holiday = Holiday(date, website_content[2])
+            date_time_date = datetime.strptime(date, "%Y %b %d")
+            date_string = datetime.strftime(date_time_date, "%Y-%m-%d")
+            website_holiday = Holiday(website_content[2], date_string)
             add_test.addHoliday(website_holiday)
         url_2024 = "https://www.timeanddate.com/holidays/us/2024?hol=1"
         executable_path = {'executable_path': ChromeDriverManager().install()}
@@ -136,7 +145,9 @@ class HolidayList:
         for tags in TextDisplayObject:
             website_content = tags.get_text("|").split("|")
             date = "2024 " + website_content[0] 
-            website_holiday = Holiday(date, website_content[2])
+            date_time_date = datetime.strptime(date, "%Y %b %d")
+            date_string = datetime.strftime(date_time_date, "%Y-%m-%d")
+            website_holiday = Holiday(website_content[2], date_string) 
             add_test.addHoliday(website_holiday)
         # Remember, 2 previous years, current year, and 2  years into the future. You can scrape multiple years by adding year to the timeanddate URL. For example https://www.timeanddate.com/holidays/us/2022
         # Check to see if name and date of holiday is in innerHolidays array
@@ -174,3 +185,6 @@ add_test.scrapeHolidays()
 print (list(holiday_dict.keys()), list(holiday_dict.values()))
 
 add_test.save_to_json("SaveFile.json")
+
+
+    
