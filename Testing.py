@@ -1,8 +1,13 @@
 import datetime
+from datetime import timedelta
+from datetime import datetime
+import itertools
 import json
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as soup
 import requests
 from dataclasses import dataclass
+from splinter import Browser
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class Holiday:
@@ -69,7 +74,74 @@ class HolidayList:
         # Write out json file to selected file.
         with open(filelocation, "w") as f:
             f.write(str(self.innerHolidays))
-   
+    def scrapeHolidays(self):
+        # Scrape Holidays from https://www.timeanddate.com/holidays/us/ 
+        url_2022 = "https://www.timeanddate.com/holidays/us/?hol=1"
+        executable_path = {'executable_path': ChromeDriverManager().install()}
+        browser = Browser('chrome', **executable_path, headless=True)
+        browser.visit(url_2022)
+        html = browser.html
+        html_soup = soup(html, "html.parser")
+        TextDisplayObject = html_soup.find_all("tr",{"class": "showrow"},"th")
+        for tags in TextDisplayObject:
+            website_content = tags.get_text("|").split("|")
+            date = "2022 " + website_content[0] 
+            website_holiday = Holiday(date, website_content[2])
+            global add_test
+            add_test.addHoliday(website_holiday)
+        
+        url_2021 = "https://www.timeanddate.com/holidays/us/2021?hol=1"
+        executable_path = {'executable_path': ChromeDriverManager().install()}
+        browser = Browser('chrome', **executable_path, headless=True)
+        browser.visit(url_2021)
+        html = browser.html
+        html_soup = soup(html, "html.parser")
+        TextDisplayObject = html_soup.find_all("tr",{"class": "showrow"},"th")
+        for tags in TextDisplayObject:
+            website_content = tags.get_text("|").split("|")
+            date = "2021 " + website_content[0] 
+            website_holiday = Holiday(date, website_content[2])
+            add_test.addHoliday(website_holiday)
+        url_2020 = "https://www.timeanddate.com/holidays/us/2020?hol=1"
+        executable_path = {'executable_path': ChromeDriverManager().install()}
+        browser = Browser('chrome', **executable_path, headless=True)
+        browser.visit(url_2020)
+        html = browser.html
+        html_soup = soup(html, "html.parser")
+        TextDisplayObject = html_soup.find_all("tr",{"class": "showrow"},"th")
+        for tags in TextDisplayObject:
+            website_content = tags.get_text("|").split("|")
+            date = "2020 " + website_content[0] 
+            website_holiday = Holiday(date, website_content[2])
+            add_test.addHoliday(website_holiday)
+        url_2023 = "https://www.timeanddate.com/holidays/us/2023?hol=1"
+        executable_path = {'executable_path': ChromeDriverManager().install()}
+        browser = Browser('chrome', **executable_path, headless=True)
+        browser.visit(url_2023)
+        html = browser.html
+        html_soup = soup(html, "html.parser")
+        TextDisplayObject = html_soup.find_all("tr",{"class": "showrow"},"th")
+        for tags in TextDisplayObject:
+            website_content = tags.get_text("|").split("|")
+            date = "2023 " + website_content[0] 
+            website_holiday = Holiday(date, website_content[2])
+            add_test.addHoliday(website_holiday)
+        url_2024 = "https://www.timeanddate.com/holidays/us/2024?hol=1"
+        executable_path = {'executable_path': ChromeDriverManager().install()}
+        browser = Browser('chrome', **executable_path, headless=True)
+        browser.visit(url_2024)
+        html = browser.html
+        html_soup = soup(html, "html.parser")
+        TextDisplayObject = html_soup.find_all("tr",{"class": "showrow"},"th")
+        for tags in TextDisplayObject:
+            website_content = tags.get_text("|").split("|")
+            date = "2024 " + website_content[0] 
+            website_holiday = Holiday(date, website_content[2])
+            add_test.addHoliday(website_holiday)
+        # Remember, 2 previous years, current year, and 2  years into the future. You can scrape multiple years by adding year to the timeanddate URL. For example https://www.timeanddate.com/holidays/us/2022
+        # Check to see if name and date of holiday is in innerHolidays array
+        # Add non-duplicates to innerHolidays
+        # Handle any exceptions.
         
 
 test = Holiday("Birthday", "1995-10-29")
@@ -96,5 +168,9 @@ total_holidays = add_test.numHolidays()
 print(total_holidays)
  
 print (holiday_dict.keys(), holiday_dict.values())
-add_test.save_to_json("SaveFile.json")
 
+
+add_test.scrapeHolidays()
+print (list(holiday_dict.keys()), list(holiday_dict.values()))
+
+add_test.save_to_json("SaveFile.json")
